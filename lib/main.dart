@@ -13,7 +13,7 @@ class HomeworkTrackerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Homework Tracker',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.red),
       home: const SplashScreen(),
     );
   }
