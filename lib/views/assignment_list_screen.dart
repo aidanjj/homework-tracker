@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import '../presenters/assignment_presenter.dart';
 
 class AssignmentListScreen extends StatefulWidget {
   const AssignmentListScreen({super.key});
@@ -11,7 +12,7 @@ class AssignmentListScreen extends StatefulWidget {
 
 class _AssignmentListScreenState
     extends State<AssignmentListScreen> {
-  final List<Map<String, dynamic>> _assignments = [];
+  final AssignmentPresenter _presenter = AssignmentPresenter();
 
   void _showAddAssignmentDialog() {
     String newAssignmentTitle = '';
@@ -40,10 +41,7 @@ class _AssignmentListScreenState
               onPressed: () {
                 if (newAssignmentTitle.isNotEmpty) {
                   setState(() {
-                    _assignments.add({
-                      'title': newAssignmentTitle,
-                      'completed': false,
-                    });
+                    _presenter.addAssignment(newAssignmentTitle.trim());
                   });
                   Navigator.of(context).pop();
                 }
@@ -56,43 +54,32 @@ class _AssignmentListScreenState
     );
   }
 
-  void _toggleCompleted(int index, bool? value) {
-    setState(() {
-      _assignments[index]['completed'] = value ?? false;
-    });
-  }
-
+  @override
   @override
   Widget build(BuildContext context) {
+    final assignments = _presenter.assignments;
+
     return Scaffold(
-      appBar: AppBar(
-          title: const Text('Assignments'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                setState(() {
-                  _assignments.clear();
-                });
-              },
-            ),
-          ],
-        ),
+      appBar: AppBar(title: const Text('Assignments')),
       body: ListView.builder(
-        itemCount: _assignments.length,
+        itemCount: assignments.length,
         itemBuilder: (context, index) {
+          final assignment = assignments[index];
           return CheckboxListTile(
-            title: Text(_assignments[index]['title']),
-            value: _assignments[index]['completed'],
-            onChanged: (value) =>
-                _toggleCompleted(index, value),
-          );
+            title: Text(assignment.title),
+            value: assignment.isCompleted,
+            onChanged: (value) {
+              setState(() {
+                _presenter.toggleCompleted(index);
+              });
+            },
+          ); // CheckboxListTile
         },
-      ),
+      ), // ListView.builder
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddAssignmentDialog,
         child: const Icon(Icons.add),
-      ),
-    );
+      ), // FloatingActionButton
+    ); // Scaffold
   }
 }
