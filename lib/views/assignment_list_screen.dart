@@ -66,7 +66,14 @@ class _AssignmentListScreenState
         itemBuilder: (context, index) {
           final assignment = assignments[index];
           return CheckboxListTile(
-            title: Text(assignment.title),
+            title: Text(
+                assignment.title,
+                style: TextStyle(
+                  decoration: assignment.isCompleted
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                )
+              ),
             value: assignment.isCompleted,
             onChanged: (value) {
               setState(() {
