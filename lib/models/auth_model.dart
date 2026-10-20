@@ -28,4 +28,15 @@ class AuthModel {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   User? get currentUser => _auth.currentUser;
+
+  Future<String?> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: email,
+      );
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message ?? 'Failed to send password reset email.';
+    }
+  }
 }

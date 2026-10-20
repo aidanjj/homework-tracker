@@ -11,6 +11,10 @@ class AuthPresenter {
     return await _authModel.signUp(email, password);
   }
 
+  Future<String?> resetPassword(String email) async {
+    return await _authModel.resetPassword(email);
+  }
+
   Future<void> logout() => _authModel.signOut();
 
   Stream getAuthStateChanges() => _authModel.authStateChanges;

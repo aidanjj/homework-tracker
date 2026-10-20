@@ -33,13 +33,30 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _handleForgotPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter your email address.';
+      });
+      return;
+    }
+
+    final error = await _presenter.resetPassword(email);
+
+    setState(() {
+      _errorMessage = error ?? 'Password reset email sent. Check your inbox.';
+    });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
         automaticallyImplyLeading: false,
-      ), // AppBar
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -49,16 +66,20 @@ class _LoginScreenState extends State<LoginScreen> {
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
-            ), // TextField
+            ),
             TextField(
               controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(labelText: 'Password'),
-            ), // TextField
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _handleLogin,
               child: const Text('Login'),
+            ),
+            TextButton(
+              onPressed: _handleForgotPassword,
+              child: const Text('Forgot Password?'),
             ),
             TextButton(
               onPressed: () {
@@ -68,10 +89,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
               },
               child: const Text('Don\'t have an account? Sign up'),
-            ), // TextButton
+            ),
           ],
-        ), // Column
-      ), // Padding
-    ); // Scaffold
+        ),
+      ),
+    );
   }
 }
