@@ -65,7 +65,19 @@ class _AssignmentListScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Assignments')),
+      appBar: AppBar(
+          title: const Text('Assignments'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                setState(() {
+                  _assignments.clear();
+                });
+              },
+            ),
+          ],
+        ),
       body: ListView.builder(
         itemCount: _assignments.length,
         itemBuilder: (context, index) {
